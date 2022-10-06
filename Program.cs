@@ -22,7 +22,7 @@ public class VehicleTracker
     //PROPERTIES
     public string Address { get; set; }
     public int Capacity { get; set; }
-    public int SlotsAvailable { get; set; }
+    public int SlotsAvailable { get; set; } = 0;
     public Dictionary<int, Vehicle> VehicleList { get; set; }
 
     public VehicleTracker(int capacity, string address)
@@ -30,7 +30,6 @@ public class VehicleTracker
         this.Capacity = capacity;
         this.Address = address;
         this.VehicleList = new Dictionary<int, Vehicle>();
-
         this.GenerateSlots();
     }
 
@@ -42,12 +41,14 @@ public class VehicleTracker
     // METHODS
     public void GenerateSlots()
     {
-        for (int i = 0; i <= this.Capacity; i++)
+        for (int i = 1; i <= this.Capacity; i++)
         {
             this.VehicleList.Add(i, null);
+            this.SlotsAvailable++;
         }
     }
 
+    //
     public void AddVehicle(Vehicle vehicle)
     {
         foreach (KeyValuePair<int, Vehicle> slot in this.VehicleList)
@@ -55,7 +56,7 @@ public class VehicleTracker
             if (slot.Value == null)
             {
                 this.VehicleList[slot.Key] = vehicle;
-                this.SlotsAvailable++;
+                this.SlotsAvailable--;
                 return;
             }
         }
