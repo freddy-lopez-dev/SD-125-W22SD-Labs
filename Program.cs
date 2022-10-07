@@ -36,6 +36,7 @@ public class VehicleTracker
     // STATIC PROPERTIES
     public static string BadSearchMessage = "Error: Search did not yield any result.";
     public static string BadSlotNumberMessage = "Error: No slot with number ";
+    public static string NotOccupiedSlotMessage = "Error: No car in given slot.";
     public static string SlotsFullMessage = "Error: no slots available.";
 
     // METHODS
@@ -68,7 +69,7 @@ public class VehicleTracker
         try
         {
             int slot = this.VehicleList.First(v => v.Value.Licence == licence).Key;
-            this.SlotsAvailable--;
+            this.SlotsAvailable++;
             this.VehicleList[slot] = null;
         }
         catch
@@ -81,8 +82,12 @@ public class VehicleTracker
     {
         if (slotNumber > this.Capacity)
         {
-            return false;
+            throw new Exception(BadSlotNumberMessage);
+        } else if (this.VehicleList[slotNumber] == null)
+        {
+            throw new Exception(NotOccupiedSlotMessage);
         }
+
         this.VehicleList[slotNumber] = null;
         this.SlotsAvailable++;
         return true;
@@ -91,7 +96,13 @@ public class VehicleTracker
     public List<Vehicle> ParkedPassholders()
     {
         List<Vehicle> passHolders = new List<Vehicle>();
-        passHolders.Add(this.VehicleList.FirstOrDefault(v => v.Value.Pass).Value);
+        foreach (KeyValuePair<int, Vehicle> slot in VehicleList)
+        {
+            if(slot.Value.Pass == true)
+            {
+                passHolders.Add(slot.Value);
+            }
+        }
         return passHolders;
     }
 
