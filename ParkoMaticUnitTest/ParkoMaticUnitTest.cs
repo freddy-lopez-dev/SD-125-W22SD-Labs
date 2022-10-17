@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using SD_125_W22SD_Lab_MVC.Models;
+using System.Collections.Generic;
 
 namespace ParkoMaticUnitTest
 {
@@ -45,7 +46,7 @@ namespace ParkoMaticUnitTest
         [DataRow("teascs", true, 0)]
         [TestMethod]
         public void CreatePass_InvalidInput_ThrowExceptionWhenPurchaserCharIsOutOfRange(string purchaser, bool prem, int capacity)
-        { 
+        {
             Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
             {
                 ParkingHelper.CreatePass(purchaser, prem, capacity);
