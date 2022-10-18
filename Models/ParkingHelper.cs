@@ -47,6 +47,27 @@
 
         }
 
+        public void AddVehicleToPass(string passHolderName, string vehicleLicence)
+        {
+            try
+            {
+                Pass currPass = parkingContext.Passes.First(p => p.Purchaser == passHolderName);
+                Vehicle currVehicle = parkingContext.Vehicles.First(v => v.Licence == vehicleLicence);
+                currPass.Vehicles.Add(currVehicle);
+                if(currPass.Capacity >= currPass.Vehicles.Count)
+                {
+                    parkingContext.SaveChanges();
+                } else
+                {
+                    throw new IndexOutOfRangeException("Unable to add vehicle as pass capacity is out of range");
+                }
+                
+            } catch
+            {
+                throw new NullReferenceException("Pass or Vehicle not found");
+            }
+
+        }
     }
 }
 
